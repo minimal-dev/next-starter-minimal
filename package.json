@@ -24,11 +24,18 @@
     "format": "prettier --ignore-path .gitignore --write \"**/*.{js,jsx,ts,tsx,json,mdx,md,css,scss}\"",
     "copy-bs-settings": "node ./scripts/copy-bs-settings.js",
     "prepare": "husky install && npm run copy-bs-settings",
-    "cz": "cz"
+    "cz": "cz",
+    "cypress": "cypress open",
+    "cypress:headless": "cypress run",
+    "e2e": "start-server-and-test dev http://localhost:3000 cypress",
+    "e2e:headless": "start-server-and-test dev http://localhost:3000 cypress:headless"
   },
   "devDependencies": {
     "@commitlint/cli": "17.4.4",
     "@commitlint/config-conventional": "17.4.4",
+    "@percy/cli": "^1.24.0",
+    "@percy/cypress": "^3.1.2",
+    "cypress": "^12.11.0",
     "eslint": "^8.39.0",
     "eslint-config-next": "latest",
     "eslint-config-prettier": "8.6.0",
@@ -38,6 +45,7 @@
     "husky": "8.0.3",
     "nano-staged": "^0.8.0",
     "prettier": "2.8.8",
+    "start-server-and-test": "^2.0.0",
     "stylelint": "15.2.0",
     "stylelint-config-recess-order": "4.0.0",
     "stylelint-config-standard-scss": "7.0.1",
