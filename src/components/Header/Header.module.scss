@@ -1,0 +1,15 @@
+@import '~styles/mixins';
+
+.header {
+  display: grid;
+  grid-auto-flow: column;
+  align-items: center;
+  justify-content: space-between;
+
+  &__logo {
+    justify-self: start;
+  }
+  @include b-d(sm) {
+    // Code...
+  }
+}

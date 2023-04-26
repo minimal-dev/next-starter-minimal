@@ -1,0 +1,13 @@
+.footer {
+  display: grid;
+  grid-auto-flow: column;
+  align-items: center;
+
+  &__logo {
+    justify-self: start;
+  }
+
+  &__copy {
+    justify-self: end;
+  }
+}
