@@ -1,9 +1,9 @@
 /** @type {import('next').NextConfig} */
 
 const path = require('path')
-// const withSvgr = require('next-plugin-svgr')
 
 const nextConfig = {
+  trailingSlash: false,
   experimental: {
     appDir: true,
     // serverComponentsExternalPackages: ['react-bootstrap'],
@@ -11,11 +11,6 @@ const nextConfig = {
   sassOptions: {
     includePaths: [path.join(__dirname, 'styles')],
   },
-  // fileLoader: true,
-  // svgrOptions: {
-  //   icon: true,
-  //   expandProps: false,
-  // },
 
   webpack(config, options) {
     const { isServer } = options
@@ -58,5 +53,4 @@ const nextConfig = {
   },
 }
 
-// module.exports = withSvgr(nextConfig)
 module.exports = nextConfig
