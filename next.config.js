@@ -1,15 +1,29 @@
 /** @type {import('next').NextConfig} */
 
 const path = require('path')
+const withClassnamesMinifier = require('next-classnames-minifier').default
+
+const productionBranchNames = ['master', 'main']
+
+const isProductionBuild = process.env.NODE_ENV === 'production'
+
+const isCloudBuild =
+  // Cloudflare
+  process.env.CF_PAGES ||
+  // Vercel
+  process.env.VERCEL
+
+const isProductionDeployment =
+  // Cloudflare
+  productionBranchNames.includes(process.env.CF_PAGES_BRANCH) ||
+  // Vercel
+  process.env.NEXT_PUBLIC_VERCEL_ENV === 'production'
 
 const nextConfig = {
   trailingSlash: false,
   experimental: {
     appDir: true,
     // serverComponentsExternalPackages: ['react-bootstrap'],
-  },
-  sassOptions: {
-    includePaths: [path.join(__dirname, 'styles')],
   },
 
   webpack(config, options) {
@@ -53,4 +67,8 @@ const nextConfig = {
   },
 }
 
-module.exports = nextConfig
+module.exports =
+  (isCloudBuild && isProductionDeployment) ||
+  (!isCloudBuild && isProductionBuild)
+    ? withClassnamesMinifier(nextConfig)
+    : nextConfig
