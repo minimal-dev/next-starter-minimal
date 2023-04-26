@@ -10,11 +10,15 @@
       "automerge": true
     },
     {
-      "matchPackagePatterns": ["^eslint"],
+      "extends": ["packages:eslint", "packages:stylelint"],
+      "matchPackageNames": ["prettier"]
+    },
+    {
+      "matchPackagePrefixes": ["eslint"],
       "groupName": "eslint packages"
     },
     {
-      "matchPackagePatterns": ["^stylelint"],
+      "matchPackagePrefixes": ["stylelint"],
       "groupName": "stylelint packages"
     }
   ]

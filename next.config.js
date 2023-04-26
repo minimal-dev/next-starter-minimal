@@ -4,6 +4,7 @@ const path = require('path')
 // const withSvgr = require('next-plugin-svgr')
 
 const nextConfig = {
+  trailingSlash: false,
   experimental: {
     appDir: true,
     // serverComponentsExternalPackages: ['react-bootstrap'],
