@@ -1,7 +1,7 @@
 /** @type {import('next').NextConfig} */
 
-const path = require('path')
 const withClassnamesMinifier = require('next-classnames-minifier').default
+const withBundleAnalyzer = require('@next/bundle-analyzer')
 
 const productionBranchNames = ['master', 'main']
 
@@ -27,14 +27,10 @@ const nextConfig = {
   },
 
   webpack(config, options) {
-    const { isServer } = options
-
     // Grab the existing rule that handles SVG imports
     const fileLoaderRule = config.module.rules.find((rule) =>
       rule.test?.test?.('.svg')
     )
-
-    const path = 'static/svg/'
 
     config.module.rules.push(
       // Reapply the existing rule, but only for svg imports ending in ?url
@@ -67,8 +63,23 @@ const nextConfig = {
   },
 }
 
-module.exports =
-  (isCloudBuild && isProductionDeployment) ||
-  (!isCloudBuild && isProductionBuild)
-    ? withClassnamesMinifier(nextConfig)
-    : nextConfig
+module.exports = () => {
+  const plugins = []
+
+  if (
+    (isCloudBuild && isProductionDeployment) ||
+    (!isCloudBuild && isProductionBuild)
+  )
+    plugins.push(withClassnamesMinifier)
+
+  const bundleAnalyzerCondition = !isCloudBuild && isProductionBuild
+
+  if (bundleAnalyzerCondition)
+    plugins.push(
+      withBundleAnalyzer({
+        enabled: bundleAnalyzerCondition,
+      })
+    )
+
+  return plugins.reduce((acc, next) => next(acc), nextConfig)
+}

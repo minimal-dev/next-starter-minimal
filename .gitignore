@@ -57,6 +57,7 @@ typings/
 # next.js
 /.next/
 /out/
+/analyze
 
 # production
 /build

@@ -23,6 +23,7 @@
     "start": "next dev",
     "serve": "next start",
     "format": "prettier --ignore-path .gitignore --write \"**/*.{js,jsx,ts,tsx,json,mdx,md,css,scss}\"",
+    "lint": "next lint",
     "copy-bs-settings": "node ./scripts/copy-bs-settings.js",
     "prepare": "husky install && npm run copy-bs-settings",
     "cz": "cz"
@@ -30,6 +31,7 @@
   "devDependencies": {
     "@commitlint/cli": "17.4.4",
     "@commitlint/config-conventional": "17.4.4",
+    "@next/bundle-analyzer": "^13.3.1",
     "eslint": "^8.39.0",
     "eslint-config-next": "latest",
     "eslint-config-prettier": "8.8.0",
