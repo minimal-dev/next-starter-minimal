@@ -26,6 +26,17 @@ const nextConfig = {
     // serverComponentsExternalPackages: ['react-bootstrap'],
   },
 
+  modularizeImports: {
+    'react-bootstrap': {
+      transform: 'react-bootstrap/{{member}}',
+      preventFullImport: true,
+    },
+    lodash: {
+      transform: 'lodash/{{member}}',
+      preventFullImport: true,
+    },
+  },
+
   webpack(config, options) {
     // Grab the existing rule that handles SVG imports
     const fileLoaderRule = config.module.rules.find((rule) =>
