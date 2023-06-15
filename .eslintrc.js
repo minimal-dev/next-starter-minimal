@@ -9,7 +9,7 @@ module.exports = {
   plugins: ['react', 'prettier'],
   rules: {
     'prettier/prettier': 'error',
-    'react/jsx-filename-extension': [1, { extensions: ['.js', '.jsx'] }],
+    'react/jsx-filename-extension': [1, { extensions: ['.ts', '.tsx'] }],
     'arrow-body-style': 'off',
     'react/jsx-props-no-spreading': 'off',
     'react/prop-types': 'warn',
