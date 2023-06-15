@@ -3,9 +3,13 @@ import cn from 'classnames'
 
 import Menu from '../Menu'
 
-import * as s from './Header.module.scss'
+import s from './Header.module.scss'
 
-const Header = ({ title }) => (
+interface HeaderProps {
+  title: string
+}
+
+const Header = ({ title }: HeaderProps) => (
   <header className={cn('container', s.header)}>
     <div className={s.header__logo}>{title}</div>
     <Menu />

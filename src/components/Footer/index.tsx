@@ -3,9 +3,13 @@ import cn from 'classnames'
 
 import Menu from '../Menu'
 
-import * as s from './Footer.module.scss'
+import s from './Footer.module.scss'
 
-const Footer = ({ title }) => {
+interface FooterProps {
+  title: string
+}
+
+const Footer = ({ title }: FooterProps) => {
   const currentYear = new Date().getFullYear()
 
   return (

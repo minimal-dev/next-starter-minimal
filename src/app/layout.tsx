@@ -30,7 +30,7 @@ export const metadata = {
   themeColor: '#000000',
 }
 
-const RootLayout = ({ children }) => {
+const RootLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <html lang="en">
       <body className={epilogue.variable} style={{ minWidth: 360 }}>

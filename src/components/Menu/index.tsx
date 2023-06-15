@@ -1,7 +1,6 @@
 'use client'
 
 import React from 'react'
-import PropTypes from 'prop-types'
 import { usePathname } from 'next/navigation'
 import Link from 'next/link'
 import { Nav } from 'react-bootstrap'
@@ -13,11 +12,18 @@ import MENU from './constants'
 
 gsap.registerPlugin(ScrollToPlugin)
 
-const Menu = ({ variant }) => {
+interface MenuProps {
+  variant?: string
+}
+
+const Menu = ({ variant }: MenuProps) => {
   const pathname = usePathname()
   const isHomepage = pathname === '/'
 
-  const handleScroll = (e, link) => {
+  const handleScroll = (
+    e: React.MouseEvent<HTMLElement, MouseEvent>,
+    link: string
+  ) => {
     e.preventDefault()
 
     gsap.to(window, { scrollTo: link, ease: 'power2' })
@@ -40,10 +46,6 @@ const Menu = ({ variant }) => {
       ))}
     </Nav>
   )
-}
-
-Menu.propTypes = {
-  variant: PropTypes.string,
 }
 
 export default Menu
