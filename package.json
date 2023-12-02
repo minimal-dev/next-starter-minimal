@@ -18,7 +18,7 @@
     "react-bootstrap": "latest",
     "react-dom": "latest",
     "sass": "latest",
-    "sharp": "^0.32.0"
+    "sharp": "^0.33.0"
   },
   "scripts": {
     "build": "next build",
