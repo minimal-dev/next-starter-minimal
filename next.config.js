@@ -81,7 +81,7 @@ module.exports = () => {
     (isCloudBuild && isProductionDeployment) ||
     (!isCloudBuild && isProductionBuild)
   )
-    plugins.push(withClassnamesMinifier)
+    plugins.push(withClassnamesMinifier())
 
   const bundleAnalyzerCondition = !isCloudBuild && isProductionBuild
 
