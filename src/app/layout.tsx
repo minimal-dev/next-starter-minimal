@@ -11,6 +11,7 @@ import '../styles/app.scss'
 
 const epilogue = Epilogue({
   subsets: ['latin'],
+  display: 'swap',
   variable: '--bs-body-font-family',
 })
 
