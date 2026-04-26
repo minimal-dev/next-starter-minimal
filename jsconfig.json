@@ -1,0 +1,12 @@
+{
+  "description": "This is to config VS Code to recongnise our aliases, aka https://medium.com/@justintulk/solve-module-import-aliasing-for-webpack-jest-and-vscode-74007ce4adc9",
+  "compilerOptions": {
+    "paths": {
+      "~img/*": ["./src/assets/img/*"],
+      "~icons/*": ["./src/assets/icons/*"],
+      "~fonts/*": ["./src/assets/fonts/*"],
+      "~*": ["./src/*"]
+    }
+  },
+  "exclude": ["node_modules", "public"]
+}

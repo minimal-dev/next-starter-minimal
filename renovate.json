@@ -1,0 +1,25 @@
+{
+  "extends": ["config:base"],
+  "semanticCommits": "enabled",
+  "stabilityDays": 3,
+  "prCreation": "not-pending",
+  "labels": ["type: dependencies"],
+  "packageRules": [
+    {
+      "matchUpdateTypes": ["minor", "patch", "pin", "digest"],
+      "automerge": true
+    },
+    {
+      "extends": ["packages:eslint", "packages:stylelint"],
+      "matchPackageNames": ["prettier"]
+    },
+    {
+      "matchPackagePrefixes": ["eslint"],
+      "groupName": "eslint packages"
+    },
+    {
+      "matchPackagePrefixes": ["stylelint"],
+      "groupName": "stylelint packages"
+    }
+  ]
+}

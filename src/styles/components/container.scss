@@ -1,0 +1,15 @@
+.container {
+  /* stylelint-disable-next-line scss/at-extend-no-missing-placeholder */
+  @extend .container-fluid;
+
+  max-width: 1240px;
+
+  &-fluid {
+    padding: 0 40px;
+    margin: auto;
+
+    @include b-d(sm) {
+      padding: 0 20px;
+    }
+  }
+}
