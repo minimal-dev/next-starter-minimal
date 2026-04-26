@@ -25,20 +25,11 @@ const nextConfig = {
   sassOptions: {
     implementation: 'sass-embedded',
     // Turbopack's sass-loader does not always preserve the source file's
-    // directory for relative @import resolution. Adding src/styles and the
-    // Bootstrap scss dir as load paths lets Sass find local partials
-    // (`@import 'settings'`) and Bootstrap's intra-package partials
-    // (`@import "vendor/rfs"`).
-    loadPaths: [
-      path.join(__dirname, 'src/styles'),
-      path.join(__dirname, 'node_modules/bootstrap/scss'),
-    ],
+    // directory for relative @import resolution. Adding src/styles as a
+    // load path lets Sass find local partials (`@import 'settings'`).
+    loadPaths: [path.join(__dirname, 'src/styles')],
   },
   modularizeImports: {
-    'react-bootstrap': {
-      transform: 'react-bootstrap/{{member}}',
-      preventFullImport: true,
-    },
     lodash: {
       transform: 'lodash/{{member}}',
       preventFullImport: true,

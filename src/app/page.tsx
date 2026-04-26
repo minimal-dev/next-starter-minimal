@@ -14,10 +14,16 @@ const Home = () => {
       <p>Now go build something great.</p>
       {/* Example of Next Image */}
       <p>
-        <Image src={ogImage} width="650" alt="Image" placeholder="blur" />
+        <Image
+          src={ogImage}
+          width={650}
+          height={371}
+          alt="Image"
+          placeholder="blur"
+        />
       </p>
       <p>
-        <Image src={NextLogo} alt="Nextjs Logo" />
+        <Image src={NextLogo} width={394} height={80} alt="Nextjs Logo" />
       </p>
       <p>
         {/* Example of Icons usage  */}

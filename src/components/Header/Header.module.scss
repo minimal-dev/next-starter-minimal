@@ -1,4 +1,4 @@
-@import '~styles/mixins';
+@use 'mixins' as *;
 
 .header {
   display: grid;

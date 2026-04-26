@@ -1,13 +1,27 @@
+@use 'settings' as *;
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
 html,
 body {
   -webkit-overflow-scrolling: touch;
 
   // Mozilla Firefox
   scrollbar-width: thin;
-  scrollbar-color: $primary transparent;
+  scrollbar-color: #ced4da transparent;
 }
 
 body {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-base);
+  color: var(--color-text);
+  background: var(--color-bg);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -19,11 +33,11 @@ body {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: darken($gray-100, 20);
+  background: #ced4da;
   border-radius: 5px;
 
   &:hover {
-    background: darken($gray-100, 30);
+    background: #adb5bd;
   }
 }
 

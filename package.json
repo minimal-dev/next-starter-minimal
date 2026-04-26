@@ -9,13 +9,12 @@
     "@types/node": "^20.3.1",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
-    "bootstrap": "^5.3.8",
     "classnames": "2.5.1",
     "gsap": "^3.15.0",
+    "modern-normalize": "^3.0.1",
     "next": "^16.2.4",
     "next-classnames-minifier": "^2.0.0",
     "react": "^19.2.5",
-    "react-bootstrap": "^2.10.10",
     "react-dom": "^19.2.5",
     "sass": "^1.99.0",
     "sharp": "^0.33.0"
@@ -27,8 +26,7 @@
     "serve": "next start",
     "format": "prettier --ignore-path .gitignore --write \"**/*.{js,jsx,ts,tsx,json,mdx,md,css,scss}\"",
     "lint": "eslint .",
-    "copy-bs-settings": "node ./scripts/copy-bs-settings.js",
-    "prepare": "husky && npm run copy-bs-settings",
+    "prepare": "husky",
     "cz": "cz"
   },
   "devDependencies": {

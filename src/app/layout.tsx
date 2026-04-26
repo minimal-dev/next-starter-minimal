@@ -4,6 +4,7 @@ import { Epilogue } from 'next/font/google'
 import Header from '~components/Header'
 import Footer from '~components/Footer'
 
+import 'modern-normalize/modern-normalize.css'
 import '../styles/app.scss'
 
 // Example of using google font
@@ -12,7 +13,7 @@ import '../styles/app.scss'
 const epilogue = Epilogue({
   subsets: ['latin'],
   display: 'swap',
-  variable: '--bs-body-font-family',
+  variable: '--font-body',
 })
 
 export const metadata = {

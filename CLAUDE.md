@@ -84,21 +84,20 @@ Strong success criteria let you loop independently. Weak criteria ("make it work
 - **Next.js 16** (App Router) with **Turbopack** as the default bundler for both `next dev` and `next build`. Webpack is opt-in via `--webpack`.
 - **React 19**, **TypeScript** (strict).
 - **SCSS modules**, compiled via **`sass-embedded`** (configured in `next.config.js` `sassOptions.implementation`).
-- **Bootstrap 5.3** + **react-bootstrap** (imports tree-shaken via `modularizeImports`).
+- **`modern-normalize`** as the cross-browser reset (imported once in `src/app/layout.tsx`).
 - **SVG handling** lives in `next.config.js` `turbopack.rules` (see SVG section below).
 - **`next-classnames-minifier`** rewrites CSS-module class names in production builds only (gated on `NODE_ENV` and cloud-build env vars).
 - **Sharp** for image optimization.
 
 ## Scripts
 
-| Script                     | Purpose                                                                                                                                                                                                              |
-| -------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `npm run dev`              | Start Turbopack dev server (alias: `npm start`, which intentionally runs `next dev`, not `next start`).                                                                                                              |
-| `npm run build`            | Production build via Turbopack. The `@next/bundle-analyzer` plugin only runs under webpack — under Turbopack it logs a notice and is a no-op. Use `npx next build --webpack` if you need the legacy analyzer report. |
-| `npm run serve`            | Run the production build (`next start`).                                                                                                                                                                             |
-| `npm run lint`             | `eslint .` against the flat config in `eslint.config.js`.                                                                                                                                                            |
-| `npm run format`           | Prettier write across the repo.                                                                                                                                                                                      |
-| `npm run copy-bs-settings` | Idempotent: copies `node_modules/bootstrap/scss/_variables.scss` → `src/styles/settings.scss`. Skips if the file exists. Auto-runs from `prepare` after `npm install`.                                               |
+| Script           | Purpose                                                                                                                                                                                                              |
+| ---------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `npm run dev`    | Start Turbopack dev server (alias: `npm start`, which intentionally runs `next dev`, not `next start`).                                                                                                              |
+| `npm run build`  | Production build via Turbopack. The `@next/bundle-analyzer` plugin only runs under webpack — under Turbopack it logs a notice and is a no-op. Use `npx next build --webpack` if you need the legacy analyzer report. |
+| `npm run serve`  | Run the production build (`next start`).                                                                                                                                                                             |
+| `npm run lint`   | `eslint .` against the flat config in `eslint.config.js`.                                                                                                                                                            |
+| `npm run format` | Prettier write across the repo.                                                                                                                                                                                      |
 
 ## Path aliases
 
@@ -109,8 +108,6 @@ Defined in both `tsconfig.json` and `jsconfig.json` — keep in sync:
 - `~fonts/*` → `src/assets/fonts/*`
 - `~*` → `src/*` (e.g. `~components/Header`)
 - `@/*` → repo root (TS only)
-
-SCSS uses `~bootstrap/...` for Bootstrap source files (Webpack `~` alias). Turbopack honors this prefix as well.
 
 ## SVG imports (Turbopack rules)
 
@@ -125,14 +122,18 @@ The `?url` opt-out is matched via `condition.query` — a Turbopack feature avai
 
 ## SCSS / Sass setup
 
-Turbopack's bundled sass-loader does not always preserve the source file's directory when handing imports to Sass, which breaks relative imports both inside Bootstrap (`@import "vendor/rfs"` from `bootstrap/scss/_mixins.scss`) and in our own files (`@import 'settings'` from `src/styles/mixins.scss`). The workaround in `next.config.js` is `sassOptions.loadPaths` listing both `src/styles` and `node_modules/bootstrap/scss`.
+Design tokens live in `src/styles/settings.scss`:
 
-If you add new SCSS partials in a directory that's referenced via bare `@import 'name'` from outside that directory, you'll likely need to extend `loadPaths` similarly.
+- **CSS custom properties** under `:root` for colors (`--color-primary`, `--color-gray-*`, `--color-bg`, `--color-text`) and sizes (`--size-container-*`, `--font-*`). Themable at runtime; readable from JSX.
+- **SCSS mirrors** (`$primary`, `$gray-100`) for places that need real Sass values — color functions like `rgba()`/`darken()` cannot read CSS custom properties.
+- **`$breakpoints` SCSS map** — used by the `b-up`/`b-d`/`b-btw`/`b-o` mixins in `mixins.scss`. Cannot be CSS variables because `@media` queries can't reference them.
+
+Turbopack's bundled sass-loader does not always preserve the source file's directory when handing imports to Sass, which breaks relative imports like `@import 'settings'` from `src/styles/mixins.scss`. The workaround in `next.config.js` is `sassOptions.loadPaths` listing `src/styles`. If you add new SCSS partials in a directory that's referenced via bare `@import 'name'` from outside that directory, you'll likely need to extend `loadPaths` similarly.
 
 ## Conventions
 
 - **Components:** `src/components/<Name>/{index.tsx,Name.module.scss}`. Arrow-function components only — enforced by ESLint (`react/function-component-definition`).
-- **Styles:** per-component `*.module.scss` for scoped styles; global tokens/mixins live in `src/styles/`. Override Bootstrap by editing `src/styles/settings.scss` _before_ the `@import 'bootstrap/scss/variables'` chain in `mixins.scss`.
+- **Styles:** per-component `*.module.scss` for scoped styles; global tokens/mixins live in `src/styles/`. Edit tokens in `src/styles/settings.scss` (CSS custom properties + SCSS mirrors + `$breakpoints` map).
 - **Imports:** ESLint's `react/jsx-filename-extension` allows JSX in `.ts`/`.tsx` only.
 - **Commits:** Conventional Commits, enforced by `commitlint` via husky `commit-msg` hook. Pre-commit runs `nano-staged`, configured in `.nanostagedrc` to run `eslint` on staged JS/TS/JSON, `stylelint --allow-empty-input` on staged CSS/SCSS, and `prettier --write` on staged MD/MDX.
 
@@ -148,9 +149,6 @@ If you add new SCSS partials in a directory that's referenced via bare `@import 
 
 ## Gotchas
 
-- **Bootstrap settings file is a one-shot copy.** `scripts/copy-bs-settings.js` won't overwrite. To pick up upstream Bootstrap changes after a major bump, delete `src/styles/settings.scss` and re-run `npm run copy-bs-settings`, then re-apply your overrides.
-- **Settings file imports `~bootstrap/scss/variables-dark`** (Bootstrap 5.3 added a dark-vars import inside `_variables.scss`). The copy script rewrites that import on the fly so it resolves through the `~bootstrap` alias instead of looking in `src/styles/`.
 - **`npm start` runs `next dev`**, not the production server. Use `npm run serve` for that.
 - **`themeColor` lives on the `viewport` export, not `metadata`** (Next 14+). When adding a route that needs its own theme color, export `const viewport = { themeColor: '...' }` rather than putting it on `metadata`.
-- **Sass deprecation warnings on build** originate inside `node_modules/bootstrap` (legacy `if()`, `divide()`, `@import`). They're upstream and not actionable from this repo.
 - **Renovate** auto-merges minor/patch/pin/digest updates (`renovate.json`); ESLint and Stylelint families are grouped. Coordinate manually for major bumps.

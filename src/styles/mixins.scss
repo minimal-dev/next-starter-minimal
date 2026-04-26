@@ -1,34 +1,68 @@
-@import '~bootstrap/scss/functions';
-@import '~bootstrap/scss/mixins';
-@import 'settings';
+@use 'sass:map';
+@use 'sass:math';
+@use 'settings' as *;
 
 @mixin b-up($name) {
-  @include media-breakpoint-up($name) {
+  $min: map.get($breakpoints, $name);
+
+  @if $min and $min != 0 {
+    @media (min-width: $min) {
+      @content;
+    }
+  } @else {
     @content;
   }
 }
 
 @mixin b-d($name) {
-  @include media-breakpoint-down($name) {
-    @content;
+  $max: map.get($breakpoints, $name);
+
+  @if $max {
+    @media (max-width: $max - 0.02px) {
+      @content;
+    }
   }
 }
 
 @mixin b-btw($lower, $upper) {
-  @include media-breakpoint-between($lower, $upper) {
+  $min: map.get($breakpoints, $lower);
+  $max: map.get($breakpoints, $upper);
+
+  @media (min-width: $min) and (max-width: $max - 0.02px) {
     @content;
   }
 }
 
 @mixin b-o($name) {
-  @include media-breakpoint-only($name) {
-    @content;
+  $keys: map.keys($breakpoints);
+  $i: index($keys, $name);
+  $min: map.get($breakpoints, $name);
+  $next: null;
+  $max: null;
+
+  @if $i < length($keys) {
+    $next: nth($keys, $i + 1);
+    $max: map.get($breakpoints, $next);
+  }
+
+  @if $min and $min != 0 and $max {
+    @media (min-width: $min) and (max-width: $max - 0.02px) {
+      @content;
+    }
+  } @else if $min and $min != 0 {
+    @media (min-width: $min) {
+      @content;
+    }
+  } @else if $max {
+    @media (max-width: $max - 0.02px) {
+      @content;
+    }
   }
 }
 
 @function strip-unit($number) {
   @if type-of($number) == 'number' and not unitless($number) {
-    @return divide($number, ($number * 0 + 1));
+    @return math.div($number, $number * 0 + 1);
   }
 
   @return $number;
@@ -39,13 +73,13 @@
   $upper,
   $min-size,
   $max-size,
-  $breakpoints: $grid-breakpoints
+  $bps: $breakpoints
 ) {
   $min-size: strip-unit($min-size);
   $max-size: strip-unit($max-size);
-  $min-width: strip-unit(map-get($breakpoints, $lower));
-  $max-width: strip-unit(map-get($breakpoints, $upper) - 0.02);
-  $slope: calc(($max-size - $min-size) / ($max-width - $min-width));
+  $min-width: strip-unit(map.get($bps, $lower));
+  $max-width: strip-unit(map.get($bps, $upper) - 0.02);
+  $slope: math.div($max-size - $min-size, $max-width - $min-width);
   $y-axis-intersection: -$min-width * $slope + $min-size;
 
   @if $max-size >= $min-size {
