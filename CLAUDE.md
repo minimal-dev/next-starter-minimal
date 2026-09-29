@@ -101,7 +101,7 @@ Strong success criteria let you loop independently. Weak criteria ("make it work
 
 ## Path aliases
 
-Defined in both `tsconfig.json` and `jsconfig.json` — keep in sync:
+Defined once, in `tsconfig.json` `compilerOptions.paths`:
 
 - `~img/*` → `src/assets/img/*`
 - `~icons/*` → `src/assets/icons/*`

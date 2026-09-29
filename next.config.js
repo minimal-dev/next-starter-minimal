@@ -4,20 +4,11 @@ const path = require('path')
 const withClassnamesMinifier = require('next-classnames-minifier').default
 const withBundleAnalyzer = require('@next/bundle-analyzer')
 
-const productionBranchNames = ['master', 'main']
-
 const isProductionBuild = process.env.NODE_ENV === 'production'
 
-const isCloudBuild =
-  // Cloudflare
-  process.env.CF_PAGES ||
-  // Vercel
-  process.env.VERCEL
+const isCloudBuild = process.env.VERCEL
 
 const isProductionDeployment =
-  // Cloudflare
-  productionBranchNames.includes(process.env.CF_PAGES_BRANCH) ||
-  // Vercel
   process.env.NEXT_PUBLIC_VERCEL_ENV === 'production'
 
 const nextConfig = {
@@ -28,12 +19,6 @@ const nextConfig = {
     // directory for relative @import resolution. Adding src/styles as a
     // load path lets Sass find local partials (`@import 'settings'`).
     loadPaths: [path.join(__dirname, 'src/styles')],
-  },
-  modularizeImports: {
-    lodash: {
-      transform: 'lodash/{{member}}',
-      preventFullImport: true,
-    },
   },
 
   turbopack: {

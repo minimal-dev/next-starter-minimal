@@ -1,7 +1,7 @@
 {
-  "extends": ["config:base"],
+  "extends": ["config:recommended"],
   "semanticCommits": "enabled",
-  "stabilityDays": 3,
+  "minimumReleaseAge": "3 days",
   "prCreation": "not-pending",
   "labels": ["type: dependencies"],
   "packageRules": [
@@ -14,11 +14,11 @@
       "matchPackageNames": ["prettier"]
     },
     {
-      "matchPackagePrefixes": ["eslint"],
+      "matchPackageNames": ["eslint*"],
       "groupName": "eslint packages"
     },
     {
-      "matchPackagePrefixes": ["stylelint"],
+      "matchPackageNames": ["stylelint*"],
       "groupName": "stylelint packages"
     }
   ]

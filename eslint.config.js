@@ -14,7 +14,7 @@ module.exports = [
   { ignores: ['.next/**', 'out/**', 'build/**', 'next-env.d.ts'] },
   ...next,
   reactPlugin.configs.flat.recommended,
-  ...compat.extends('plugin:json/recommended'),
+  ...compat.extends('plugin:json/recommended-legacy'),
   {
     plugins: { prettier: prettierPlugin },
     settings: { react: { version: 'detect' } },

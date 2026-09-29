@@ -3,42 +3,88 @@
   <a href="https://nextjs.org/" target="_blank"><img alt="Next.js" src="https://user-images.githubusercontent.com/4237964/234674093-ab3f022c-f13e-4ec1-9f04-a6507e70da94.svg" width="100" /></a>
 </p>
 <h1 align="center">
-  Minimal's Next.js default starter
+  Minimal's Next.js starter
 </h1>
 
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+A minimal Next.js 16 (App Router) starter with TypeScript, SCSS modules, SVG
+components and a strict lint/format/commit toolchain.
 
-## Getting Started
+## Requirements
 
-First, run the development server:
+- Node.js 24 LTS (`.nvmrc`; `engines.node` is `>=24`, which Vercel reads)
+- npm
+
+## Getting started
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+## Scripts
 
-[http://localhost:3000/api/hello](http://localhost:3000/api/hello) is an endpoint that uses [Route Handlers](https://beta.nextjs.org/docs/routing/route-handlers). This endpoint can be edited in `app/api/hello/route.js`.
+| Script             | What it does                                                              |
+| ------------------ | ------------------------------------------------------------------------- |
+| `npm run dev`      | Turbopack dev server. `npm start` is an alias of `dev`, not `next start`. |
+| `npm run build`    | Production build (Turbopack).                                             |
+| `npm run serve`    | Serve the production build (`next start`).                                |
+| `npm run lint`     | ESLint (flat config in `eslint.config.js`).                               |
+| `npm run format`   | Prettier over JS/TS/JSON/MD/CSS/SCSS.                                     |
+| `npx tsc --noEmit` | Type-check without building.                                              |
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+## Path aliases
 
-## Learn More
+Defined once in `tsconfig.json` (`compilerOptions.paths`):
 
-To learn more about Next.js, take a look at the following resources:
+| Alias      | Resolves to                         |
+| ---------- | ----------------------------------- |
+| `~img/*`   | `src/assets/img/*`                  |
+| `~icons/*` | `src/assets/icons/*`                |
+| `~fonts/*` | `src/assets/fonts/*`                |
+| `~*`       | `src/*` (e.g. `~components/Header`) |
+| `@/*`      | repository root                     |
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## SVG imports
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+Configured in `next.config.js` under `turbopack.rules['*.svg']`:
 
-## Deploy on Vercel
+```tsx
+import Logo from '~icons/logo.svg' // React component via SVGR: <Logo width={60} />
+import logoUrl from '~img/logo.svg?url' // static asset URL for <Image> or <img>
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+The `?url` rule relies on Turbopack `condition.query` (Next 16.2+).
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+## Styles
+
+- Per-component SCSS modules: `src/components/<Name>/<Name>.module.scss`.
+- Global styles: `src/styles/app.scss`, imported once in `src/app/layout.tsx`
+  after `modern-normalize`.
+- Design tokens: `src/styles/settings.scss` — CSS custom properties on
+  `:root`, Sass mirrors for colour functions, and the `$breakpoints` map.
+- Breakpoint mixins in `src/styles/mixins.scss`: `b-up`, `b-d`, `b-btw`,
+  `b-o`, plus `clamp-builder()`. Use them with `@use 'mixins' as *;`.
+- Sass runs through `sass-embedded`; `src/styles` is a Sass load path, so
+  partials import by bare name.
+
+## Tooling
+
+- **ESLint 9** flat config: `eslint-config-next` (core web vitals),
+  `eslint-plugin-react`, `eslint-plugin-json`, Prettier as a rule.
+  Components are arrow functions (`react/function-component-definition`).
+- **Prettier 3**: single quotes, no semicolons, 2 spaces, ES5 trailing commas.
+- **Stylelint 17**: `stylelint-config-standard-scss`,
+  `stylelint-config-recess-order`, Prettier plugin.
+- **Git hooks** (husky): `pre-commit` runs `nano-staged` (`.nanostagedrc`),
+  `commit-msg` runs commitlint with Conventional Commits.
+- **Renovate** (`renovate.json`) groups ESLint and Stylelint updates and
+  auto-merges minor and patch releases.
+- `next-classnames-minifier` shortens CSS-module class names in production
+  builds only.
+
+## Deploy
+
+Vercel detects Next.js automatically; the Node version comes from
+`engines.node`.
