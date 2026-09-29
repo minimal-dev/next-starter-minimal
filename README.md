@@ -81,8 +81,6 @@ The `?url` rule relies on Turbopack `condition.query` (Next 16.2+).
   `commit-msg` runs commitlint with Conventional Commits.
 - **Renovate** (`renovate.json`) groups ESLint and Stylelint updates and
   auto-merges minor and patch releases.
-- `next-classnames-minifier` shortens CSS-module class names in production
-  builds only.
 
 ## Deploy
 

@@ -86,7 +86,6 @@ Strong success criteria let you loop independently. Weak criteria ("make it work
 - **SCSS modules**, compiled via **`sass-embedded`** (configured in `next.config.js` `sassOptions.implementation`).
 - **`modern-normalize`** as the cross-browser reset (imported once in `src/app/layout.tsx`).
 - **SVG handling** lives in `next.config.js` `turbopack.rules` (see SVG section below).
-- **`next-classnames-minifier`** rewrites CSS-module class names in production builds only (gated on `NODE_ENV` and cloud-build env vars).
 - **Sharp** for image optimization.
 
 ## Scripts

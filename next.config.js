@@ -1,15 +1,11 @@
 /** @type {import('next').NextConfig} */
 
 const path = require('path')
-const withClassnamesMinifier = require('next-classnames-minifier').default
 const withBundleAnalyzer = require('@next/bundle-analyzer')
 
 const isProductionBuild = process.env.NODE_ENV === 'production'
 
 const isCloudBuild = process.env.VERCEL
-
-const isProductionDeployment =
-  process.env.NEXT_PUBLIC_VERCEL_ENV === 'production'
 
 const nextConfig = {
   trailingSlash: false,
@@ -49,12 +45,6 @@ const nextConfig = {
 
 module.exports = () => {
   const plugins = []
-
-  if (
-    (isCloudBuild && isProductionDeployment) ||
-    (!isCloudBuild && isProductionBuild)
-  )
-    plugins.push(withClassnamesMinifier())
 
   const bundleAnalyzerCondition = !isCloudBuild && isProductionBuild
 
