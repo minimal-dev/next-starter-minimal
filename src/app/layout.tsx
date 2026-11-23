@@ -17,8 +17,14 @@ const epilogue = Epilogue({
 })
 
 export const metadata = {
-  // Absolute base for OG/Twitter image URLs; set SITE_URL in production.
-  metadataBase: new URL(process.env.SITE_URL ?? 'http://localhost:3000'),
+  // Absolute base for OG/Twitter image URLs. SITE_URL wins; Vercel sets the
+  // production domain automatically.
+  metadataBase: new URL(
+    process.env.SITE_URL ??
+      (process.env.VERCEL_PROJECT_PRODUCTION_URL
+        ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
+        : 'http://localhost:3000')
+  ),
   title: {
     template: '%s | Minimal Next Starter',
     default: 'Minimal Next Starter',

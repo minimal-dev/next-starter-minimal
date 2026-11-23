@@ -1,6 +1,7 @@
 const { defineConfig, globalIgnores } = require('eslint/config')
 const { fixupPluginRules } = require('@eslint/compat')
 const json = require('@eslint/json').default
+const importX = require('eslint-plugin-import-x')
 const nextPlugin = require('@next/eslint-plugin-next')
 const reactPlugin = require('eslint-plugin-react')
 const reactHooks = require('eslint-plugin-react-hooks')
@@ -18,7 +19,7 @@ module.exports = defineConfig([
       prettierRecommended,
     ],
     // eslint-plugin-react 7.x still calls context methods removed in ESLint 10.
-    plugins: { react: fixupPluginRules(reactPlugin) },
+    plugins: { react: fixupPluginRules(reactPlugin), 'import-x': importX },
     languageOptions: {
       parser: tseslint.parser,
       parserOptions: { ecmaFeatures: { jsx: true } },
@@ -28,6 +29,7 @@ module.exports = defineConfig([
     rules: {
       ...reactPlugin.configs.flat.recommended.rules,
       ...reactPlugin.configs.flat['jsx-runtime'].rules,
+      'import-x/no-anonymous-default-export': 'warn',
       'react/no-unknown-property': 'off',
       'react/prop-types': 'off',
       'react/jsx-no-target-blank': 'off',

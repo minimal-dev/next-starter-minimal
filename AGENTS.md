@@ -169,6 +169,7 @@ Turbopack's bundled sass-loader does not always preserve the source file's direc
   - `eslint-plugin-react` `flat.recommended` + `flat['jsx-runtime']`, wrapped in `@eslint/compat` `fixupPluginRules` (7.x calls `context.getFilename()`, removed in ESLint 10)
   - `eslint-plugin-react-hooks` `flat.recommended`
   - `typescript-eslint` parser only (no type-aware or `recommended` rules)
+  - `eslint-plugin-import-x` for `import-x/no-anonymous-default-export` only (the one import rule `eslint-config-next` enabled)
   - `eslint-plugin-prettier/recommended`
   - `@eslint/json` `recommended` for `**/*.json` (`package-lock.json` ignored)
 - No accessibility linting (`jsx-a11y` removed on purpose).
@@ -180,7 +181,7 @@ Turbopack's bundled sass-loader does not always preserve the source file's direc
 
 - **`npm start` runs `next dev`**, not the production server. Use `npm run serve` for that.
 - **`themeColor` lives on the `viewport` export, not `metadata`** (Next 14+). When adding a route that needs its own theme color, export `const viewport = { themeColor: '...' }` rather than putting it on `metadata`.
-- **`metadataBase`** reads `SITE_URL` (falls back to `http://localhost:3000`). Set it in production so OG/Twitter image URLs are absolute.
+- **`metadataBase`** reads `SITE_URL`, then Vercel's `VERCEL_PROJECT_PRODUCTION_URL`, then `http://localhost:3000`. Set `SITE_URL` when deploying outside Vercel or behind a custom domain Vercel does not report.
 - **Renovate** auto-merges minor/patch/pin/digest updates (`renovate.json`); `next`, ESLint and Stylelint families are grouped. Coordinate manually for major bumps.
 
 ## Commit rules
