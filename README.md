@@ -25,14 +25,15 @@ Open [http://localhost:3000](http://localhost:3000).
 
 ## Scripts
 
-| Script             | What it does                                                              |
-| ------------------ | ------------------------------------------------------------------------- |
-| `npm run dev`      | Turbopack dev server. `npm start` is an alias of `dev`, not `next start`. |
-| `npm run build`    | Production build (Turbopack).                                             |
-| `npm run serve`    | Serve the production build (`next start`).                                |
-| `npm run lint`     | ESLint (flat config in `eslint.config.js`).                               |
-| `npm run format`   | Prettier over JS/TS/JSON/MD/CSS/SCSS.                                     |
-| `npx tsc --noEmit` | Type-check without building.                                              |
+| Script              | What it does                                                              |
+| ------------------- | ------------------------------------------------------------------------- |
+| `npm run dev`       | Turbopack dev server. `npm start` is an alias of `dev`, not `next start`. |
+| `npm run build`     | Production build (Turbopack).                                             |
+| `npm run serve`     | Serve the production build (`next start`).                                |
+| `npm run analyze`   | Turbopack bundle analyzer UI (`next analyze`); does not build the app.    |
+| `npm run typecheck` | Type-check without building (`tsc --noEmit`).                             |
+| `npm run lint`      | ESLint (flat config in `eslint.config.js`).                               |
+| `npm run format`    | Prettier over JS/TS/JSON/MD/CSS/SCSS.                                     |
 
 ## Path aliases
 

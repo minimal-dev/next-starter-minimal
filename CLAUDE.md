@@ -86,17 +86,19 @@ Strong success criteria let you loop independently. Weak criteria ("make it work
 - **SCSS modules**, compiled via **`sass-embedded`** (configured in `next.config.js` `sassOptions.implementation`).
 - **`modern-normalize`** as the cross-browser reset (imported once in `src/app/layout.tsx`).
 - **SVG handling** lives in `next.config.js` `turbopack.rules` (see SVG section below).
-- **Sharp** for image optimization.
+- **Sharp** for image optimization, installed by `next` as an optional dependency (not listed in `package.json`).
 
 ## Scripts
 
-| Script           | Purpose                                                                                                                                                                                                              |
-| ---------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `npm run dev`    | Start Turbopack dev server (alias: `npm start`, which intentionally runs `next dev`, not `next start`).                                                                                                              |
-| `npm run build`  | Production build via Turbopack. The `@next/bundle-analyzer` plugin only runs under webpack — under Turbopack it logs a notice and is a no-op. Use `npx next build --webpack` if you need the legacy analyzer report. |
-| `npm run serve`  | Run the production build (`next start`).                                                                                                                                                                             |
-| `npm run lint`   | `eslint .` against the flat config in `eslint.config.js`.                                                                                                                                                            |
-| `npm run format` | Prettier write across the repo.                                                                                                                                                                                      |
+| Script              | Purpose                                                                                                 |
+| ------------------- | ------------------------------------------------------------------------------------------------------- |
+| `npm run dev`       | Start Turbopack dev server (alias: `npm start`, which intentionally runs `next dev`, not `next start`). |
+| `npm run build`     | Production build via Turbopack.                                                                         |
+| `npm run serve`     | Run the production build (`next start`).                                                                |
+| `npm run analyze`   | Turbopack bundle analyzer UI (`next analyze`). Does not produce a build.                                |
+| `npm run typecheck` | `tsc --noEmit`.                                                                                         |
+| `npm run lint`      | `eslint .` against the flat config in `eslint.config.js`.                                               |
+| `npm run format`    | Prettier write across the repo.                                                                         |
 
 ## Path aliases
 
