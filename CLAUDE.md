@@ -143,7 +143,7 @@ Turbopack's bundled sass-loader does not always preserve the source file's direc
   - `eslint-plugin-react`'s `configs.flat.recommended`
   - `plugin:json/recommended` via `FlatCompat` (the `eslint-plugin-json` package only ships legacy configs)
   - `eslint-config-prettier` rules + `eslint-plugin-prettier`
-- **Stylelint 16** with `stylelint-config-standard-scss` + `stylelint-config-recess-order` + `stylelint-prettier`.
+- **Stylelint 18** with `stylelint-config-standard-scss` + `stylelint-config-recess-order` + `stylelint-prettier`.
 - **Prettier 3**, single quotes, no semicolons, 2-space tabs, ES5 trailing commas.
 
 ## Gotchas

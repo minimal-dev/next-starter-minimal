@@ -75,7 +75,7 @@ The `?url` rule relies on Turbopack `condition.query` (Next 16.2+).
   `eslint-plugin-react`, `eslint-plugin-json`, Prettier as a rule.
   Components are arrow functions (`react/function-component-definition`).
 - **Prettier 3**: single quotes, no semicolons, 2 spaces, ES5 trailing commas.
-- **Stylelint 17**: `stylelint-config-standard-scss`,
+- **Stylelint 18**: `stylelint-config-standard-scss`,
   `stylelint-config-recess-order`, Prettier plugin.
 - **Git hooks** (husky): `pre-commit` runs `nano-staged` (`.nanostagedrc`),
   `commit-msg` runs commitlint with Conventional Commits.
