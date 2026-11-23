@@ -87,6 +87,10 @@ yarn-error.log
 *.tsbuildinfo
 next-env.d.ts
 
+# agent plans (rules and skills stay tracked)
+.cursor/prompts/
+.claude/prompts/
+
 # For IDEs use global gitignore
 # touch ~/.gitignore_global
 # git config --global core.excludesfile ~/.gitignore_global

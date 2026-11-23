@@ -1,0 +1,76 @@
+---
+description: Quality checks and consistency guardrails. Run when creating or updating any component. Covers missing states, token misuse, prop consistency, accessibility, and text flexibility.
+globs: src/components/**/*.{ts,tsx,scss}
+alwaysApply: false
+---
+
+# Quality & Consistency Checks
+
+Run this checklist and flag any issue to the user before marking a task done.
+
+### Token Check
+
+- [ ] Zero hardcoded hex in new component SCSS — colors via the CSS custom properties in `src/styles/settings.scss` (`--color-primary`, `--color-gray-*`, `--color-bg`, `--color-text`). Sass color functions use the `$`-mirrors (`$primary`).
+- [ ] Container sizes and type via tokens (`--size-container-*`, `--font-*`). Add a token to `settings.scss` rather than a one-off raw value.
+- [ ] Zero raw breakpoint values in `@media` — use `b-up` / `b-d` / `b-btw` / `b-o` (rule 12).
+
+### State Completeness
+
+Check these states exist in the design AND in code. Flag any missing from either.
+
+- Default / rest
+- Hover — interactive elements (desktop only — gate with `@media (hover: hover)`)
+- Focus / focus-visible — interactive elements (keyboard reachable)
+- Pressed / active — interactive elements
+- Disabled — `disabled` for native controls, `aria-disabled="true"` for custom
+- Loading / busy — elements that trigger async (`aria-busy="true"`)
+- Error — inputs, forms, data displays
+- Empty — lists, data displays
+
+**Flag example**: "The design has no error state for the newsletter input. Should I build it with a red border and an error message below as the default?"
+
+### Merging Check
+
+If two components being built are structurally identical with minor style differences, flag it and recommend a `variant` prop.
+
+### Text flexibility
+
+For any component that contains text:
+
+1. Does it handle text that is ~2× longer without breaking layout?
+2. Does it handle text that wraps to 2 lines without breaking layout?
+
+Apply unconditionally:
+
+- No fixed `width` / `height` on text containers. Use `min-width` / `min-height` if a minimum is required.
+- Allow wrapping unless the design explicitly says "single line only" — then `white-space: nowrap; overflow: hidden; text-overflow: ellipsis;` and a tooltip if context is lost.
+- Icon + label rows: label flexes, icon pinned with `flex-shrink: 0`.
+- Avoid `position: absolute` for text labels.
+
+### Accessibility
+
+No a11y linter runs in this repo, so these checks are manual.
+
+- Prefer semantic HTML first (`<button>`, `<a>`, `<input>`, `<nav>`, `<dialog>`). ARIA only when no native element fits.
+- All interactive elements reachable via keyboard. Visible focus indicator (no `outline: none` without a replacement).
+- `alt` on every `<Image>` / `<img>`; empty `alt=""` for decorative images.
+- `aria-label` on icon-only buttons. `aria-describedby` for error/help text on inputs.
+- Decorative SVGR icons: `aria-hidden="true"`.
+- Color contrast: minimum 4.5:1 for body text, 3:1 for large text and interactive boundaries.
+
+### Props Consistency
+
+Props that appear in more than one component must use identical names and types:
+
+```
+disabled: boolean
+isLoading: boolean        (not: loading, pending, busy)
+onClick: () => void       (not: onPress, onTap)
+variant: string union     (not: type, kind, mode)
+size: 'small' | 'medium' | 'large'
+className?: string        (always accepted on the root)
+```
+
+### className Composition
+
+`classnames` aliased as `cn` is the only helper. See `14-classnames-cn-alias.mdc`.

@@ -1,4 +1,5 @@
 #!/bin/sh
 . "$(dirname "$0")/common.sh"
 
+npm run typecheck
 npx nano-staged

@@ -1,0 +1,50 @@
+---
+description: Always alias the classnames library as cn and use it for every class-composition site. Bans template literals and .join(' ') for class strings.
+globs: src/**/*.{ts,tsx}
+alwaysApply: false
+---
+
+# classnames `cn` Alias
+
+`classnames` is the only allowed class-composition helper. Always import it under the alias `cn`.
+
+## Canonical pattern
+
+```tsx
+import cn from 'classnames'
+
+import s from './Header.module.scss'
+
+const Header = ({ isActive, className }: HeaderProps) => (
+  <header className={cn('container', s.header, { [s['header--active']]: isActive }, className)}>
+    …
+  </header>
+)
+```
+
+1. Default import aliased as `cn`.
+2. SCSS module imported as `s`.
+3. Positional args for unconditional classes.
+4. Object form for conditional classes.
+5. Forwarded `className` last.
+
+## Hard rules
+
+- **No template literals for whole class strings.** A template literal as a module key (`s[`menu--${variant}`]`) is fine.
+- **No array `.join(' ')`.**
+- **No manual string concatenation.**
+- **No ternaries for class toggles.** Use `{ [s.active]: isActive }` inside `cn(...)`.
+- **`cn` not `classNames` / `clsx` / `c`.**
+- **Always pass forwarded `className` last.**
+
+## When `cn` is overkill
+
+Single static class — call without `cn`:
+
+```tsx
+<button className={s.root}>…</button>
+```
+
+The moment a second class, a conditional, or a forwarded `className` appears, switch to `cn`.
+
+Do not install `clsx`. If merge-aware (Tailwind-style) composition is needed, ask first — this project is SCSS-module-first.

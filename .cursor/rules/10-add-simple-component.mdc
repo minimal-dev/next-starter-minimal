@@ -1,0 +1,100 @@
+---
+description: How to add a simple single-root component under src/components (Header, Footer, Menu style). Folder shape, props, SCSS module, arrow-function component.
+globs: src/components/**/*.{ts,tsx,scss}
+alwaysApply: false
+---
+
+# How to add a simple component
+
+Pattern: one folder per component, single root element, styles from tokens. The existing `Header`, `Footer` and `Menu` follow it.
+
+## Step-by-step
+
+1. Create `src/components/<Name>/`:
+
+   ```
+   src/components/<Name>/
+   ├── index.tsx
+   └── <Name>.module.scss
+   ```
+
+   Add a `constants.ts` only for static data the component maps over (see `Menu/constants.tsx`).
+
+2. Define props as an interface in `index.tsx`. Accept `className` on the root when the component is reused in more than one place:
+
+   ```tsx
+   interface ButtonProps {
+     variant?: 'primary' | 'secondary'
+     isLoading?: boolean
+     className?: string
+     children: ReactNode
+   }
+   ```
+
+3. Write styles in `<Name>.module.scss`. **Never** hardcode hex or raw breakpoints — use the tokens in `src/styles/settings.scss` and the mixins (rule 12). Load mixins only when the module uses them:
+
+   ```scss
+   @use 'mixins' as *;
+
+   .button {
+     padding: 0.5rem 1rem;
+     color: var(--color-bg);
+     background-color: var(--color-primary);
+     border-radius: 4px;
+
+     @media (hover: hover) {
+       &:hover {
+         opacity: 0.9;
+       }
+     }
+
+     &:focus-visible {
+       outline: 2px solid var(--color-primary);
+       outline-offset: 2px;
+     }
+
+     &[disabled] {
+       cursor: not-allowed;
+       opacity: 0.5;
+     }
+
+     @include b-up(md) {
+       padding: 0.75rem 1.5rem;
+     }
+   }
+   ```
+
+   Child elements use BEM-style nesting: `.header { &__logo { … } }` compiles to `.header__logo`, consumed as `s.header__logo`. Modifiers use `--`: `s['menu--footer']`.
+
+4. Implement `index.tsx` as an **arrow-function component** with a default export (ESLint enforces arrow functions). Compose classes with `cn` (rule 14). No `import React` — import types by name:
+
+   ```tsx
+   import type { ReactNode } from 'react'
+   import cn from 'classnames'
+
+   import s from './Button.module.scss'
+
+   const Button = ({
+     variant = 'primary',
+     isLoading = false,
+     className,
+     children,
+   }: ButtonProps) => (
+     <button
+       type="button"
+       className={cn(s.button, s[`button--${variant}`], className)}
+       disabled={isLoading}
+       aria-busy={isLoading || undefined}
+     >
+       {children}
+     </button>
+   )
+
+   export default Button
+   ```
+
+5. Add `'use client'` only when the component needs hooks, browser APIs or event handlers (as `Menu` does). Everything else stays a server component.
+
+6. Import it through the alias: `import Button from '~components/Button'`.
+
+7. Run `npm run lint`, `npm run typecheck` and `npx stylelint "src/**/*.scss"`; all must pass with zero warnings before handing off.

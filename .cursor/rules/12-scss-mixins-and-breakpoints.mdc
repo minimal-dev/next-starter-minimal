@@ -1,0 +1,78 @@
+---
+description: SCSS responsive mixins and the breakpoint map. Use these for every @media query and fluid sizing. Never write raw min-width/max-width queries in component SCSS.
+globs: src/**/*.scss
+alwaysApply: false
+---
+
+# SCSS Mixins & Breakpoints
+
+All responsive logic in SCSS modules flows through helpers in `src/styles/mixins.scss`, which read the `$breakpoints` map in `src/styles/settings.scss`. Never write raw `@media (min-width: …)` in component SCSS.
+
+## The breakpoint map
+
+```scss
+// src/styles/settings.scss
+$breakpoints: (
+  xs: 0,
+  sm: 576px,
+  md: 768px,
+  lg: 992px,
+  xl: 1200px,
+  xxl: 1400px,
+);
+```
+
+Mobile-first — `xs` is the implicit default, no `@media` needed.
+
+## How to use
+
+```scss
+@use 'mixins' as *;
+```
+
+The bare `mixins` load is resolved via `sassOptions.loadPaths: ['src/styles']` in `next.config.js`. Do not pass relative paths. Use `@use`, never the deprecated `@import`.
+
+### `b-up($name)` — min-width (default)
+
+```scss
+.card {
+  padding: 1rem;
+
+  @include b-up(md) {
+    padding: 2rem;
+  }
+}
+```
+
+`b-up(xs)` renders with no media wrapper (`xs = 0`).
+
+### `b-d($name)` — max-width (rarely)
+
+`max-width: $value - 0.02px` so it never overlaps a `b-up` at the same name. Prefer `b-up` whenever the design can be expressed mobile-first. `container.scss` uses `b-d(sm)` for the narrow gutter.
+
+### `b-btw($lower, $upper)` — between
+
+Inclusive on the lower end, exclusive on the upper.
+
+### `b-o($name)` — only this step
+
+From this breakpoint up to the next map entry. Use sparingly.
+
+## Fluid sizing — `clamp-builder($lower, $upper, $min-size, $max-size)`
+
+Returns a `clamp()` that scales linearly between two breakpoints. Use for long-form headings and generous container padding — not for small UI atoms.
+
+```scss
+h1 {
+  font-size: clamp-builder(sm, xl, 32px, 56px);
+}
+```
+
+## Hard rules
+
+- **No raw `@media (min-width: …)` or `(max-width: …)` in component SCSS.** Always `b-up` / `b-d` / `b-btw` / `b-o`. `@media (hover: hover)` is fine.
+- **No raw pixel values as mixin arguments.** Pass map names (`md`, not `768px`).
+- **Default to mobile-first (`b-up`).**
+- **`@use 'mixins' as *;` once per module that uses them**, and not in modules that don't.
+- **Add new breakpoints to the map**, never inline a one-off. Discuss first — six steps is already plenty.
+- **Sass module functions only** (`list.nth`, `map.get`, `math.div`, `meta.type-of`); stylelint rejects the global built-ins.

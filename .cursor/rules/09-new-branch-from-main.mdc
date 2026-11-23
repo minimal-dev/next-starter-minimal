@@ -1,0 +1,37 @@
+---
+description: New branch workflow — always cut new branches from the latest main, never from the current branch
+alwaysApply: true
+---
+
+# New Branch From Main
+
+When starting work on a new task that needs its own branch, always create the branch from the **latest `main`** — not from whatever branch happens to be checked out.
+
+Skip this rule **only** if the user explicitly says otherwise (e.g. "branch off `feat/…`", "stack this on top of my current branch").
+
+## Steps to follow every time
+
+1. **Fetch the latest state of the remote**
+   ```
+   git fetch origin
+   ```
+
+2. **Create the new branch from `origin/main`**
+   ```
+   git switch -c <branch-name> origin/main
+   ```
+   Use a Conventional-Commits-style prefix matching the work type:
+   `feat/…`, `fix/…`, `chore/…`, `refactor/…`, `docs/…`.
+
+3. **Verify the base**
+   ```
+   git log --oneline -1
+   ```
+   The first commit shown must match the tip of `origin/main`. If it does not, stop and tell the user — do not start coding on the wrong base.
+
+## Hard rules
+
+- NEVER branch off the currently checked-out feature branch by accident. Always pass `origin/main` (or `main`, if it tracks `origin/main`) explicitly to `git switch -c` / `git checkout -b`.
+- NEVER skip the `git fetch origin` step — a stale local `main` produces an out-of-date base.
+- If the working tree has uncommitted changes when the user asks for a new branch, stop and ask whether to stash, commit, or discard them before branching.
+- If the user explicitly says to branch off something other than `main`, follow their instruction and confirm the base in your next message.

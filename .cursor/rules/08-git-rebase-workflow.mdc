@@ -1,0 +1,45 @@
+---
+description: Git sync workflow — always rebase onto main, never merge
+alwaysApply: true
+---
+
+# Git Rebase Workflow
+
+Before writing or changing any code, sync with the main branch using rebase, not merge.
+
+## Steps to follow every time
+
+1. **Fetch the latest state of the remote**
+   ```
+   git fetch origin
+   ```
+
+2. **Check if main has new commits that your branch does not have**
+   ```
+   git log HEAD..origin/main --oneline
+   ```
+   If the output is empty, main has nothing new — skip to coding.
+
+3. **Check for duplicate commits** (commits with the same message already in your branch)
+   ```
+   git log origin/main..HEAD --oneline
+   ```
+   Compare with `git log origin/main --oneline`. If the same change appears on both sides, it is a duplicate that will cause a conflict or noise during rebase.
+
+4. **Drop duplicate commits** before syncing if step 3 found any. Do **not** run `git rebase -i` — it needs an interactive editor. List the duplicate hashes and ask the user to drop them, or use a non-interactive equivalent they approve.
+
+5. **Rebase onto main**
+   ```
+   git rebase origin/main
+   ```
+
+6. **Resolve any conflicts**, then continue:
+   ```
+   git rebase --continue
+   ```
+
+## Hard rules
+
+- NEVER run `git merge main` or `git merge origin/main`. Always use rebase.
+- NEVER force-push to `main` or `master`.
+- If the rebase produces unexpected conflicts or a tangled history, stop and tell the user what happened before doing anything else.
