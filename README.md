@@ -11,7 +11,7 @@ components and a strict lint/format/commit toolchain.
 
 ## Requirements
 
-- Node.js 24 LTS (`.nvmrc`; `engines.node` is `>=24`, which Vercel reads)
+- Node.js 26 LTS (`.nvmrc`; `engines.node` is `26.x`, which Vercel reads)
 - npm
 
 ## Getting started
