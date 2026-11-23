@@ -1,11 +1,7 @@
 {
   "compilerOptions": {
     "target": "es2022",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
+    "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
@@ -24,21 +20,11 @@
       }
     ],
     "paths": {
-      "@/*": [
-        "./*"
-      ],
-      "~img/*": [
-        "./src/assets/img/*"
-      ],
-      "~icons/*": [
-        "./src/assets/icons/*"
-      ],
-      "~fonts/*": [
-        "./src/assets/fonts/*"
-      ],
-      "~*": [
-        "./src/*"
-      ]
+      "@/*": ["./*"],
+      "~img/*": ["./src/assets/img/*"],
+      "~icons/*": ["./src/assets/icons/*"],
+      "~fonts/*": ["./src/assets/fonts/*"],
+      "~*": ["./src/*"]
     }
   },
   "include": [
@@ -49,7 +35,5 @@
     "./src/types/*.d.ts",
     ".next/dev/types/**/*.ts"
   ],
-  "exclude": [
-    "node_modules"
-  ]
+  "exclude": ["node_modules"]
 }
