@@ -126,10 +126,10 @@ The `?url` opt-out is matched via `condition.query` — a Turbopack feature avai
 Design tokens live in `src/styles/settings.scss`:
 
 - **CSS custom properties** under `:root` for colors (`--color-primary`, `--color-gray-*`, `--color-bg`, `--color-text`) and sizes (`--size-container-*`, `--font-*`). Themable at runtime; readable from JSX.
-- **SCSS mirrors** (`$primary`, `$gray-100`) for places that need real Sass values — color functions like `rgba()`/`darken()` cannot read CSS custom properties.
+- **SCSS mirrors** (`$primary`) for places that need real Sass values — color functions like `rgba()`/`darken()` cannot read CSS custom properties.
 - **`$breakpoints` SCSS map** — used by the `b-up`/`b-d`/`b-btw`/`b-o` mixins in `mixins.scss`. Cannot be CSS variables because `@media` queries can't reference them.
 
-Turbopack's bundled sass-loader does not always preserve the source file's directory when handing imports to Sass, which breaks relative imports like `@import 'settings'` from `src/styles/mixins.scss`. The workaround in `next.config.js` is `sassOptions.loadPaths` listing `src/styles`. If you add new SCSS partials in a directory that's referenced via bare `@import 'name'` from outside that directory, you'll likely need to extend `loadPaths` similarly.
+Turbopack's bundled sass-loader does not always preserve the source file's directory when handing imports to Sass, which breaks relative loads like `@use 'settings'` from `src/styles/mixins.scss`. The workaround in `next.config.js` is `sassOptions.loadPaths` listing `src/styles`. If you add new SCSS partials in a directory that's referenced via bare `@use 'name'` from outside that directory, you'll likely need to extend `loadPaths` similarly.
 
 ## Conventions
 

@@ -1,5 +1,7 @@
+@use 'sass:list';
 @use 'sass:map';
 @use 'sass:math';
+@use 'sass:meta';
 @use 'settings' as *;
 
 @mixin b-up($name) {
@@ -35,13 +37,13 @@
 
 @mixin b-o($name) {
   $keys: map.keys($breakpoints);
-  $i: index($keys, $name);
+  $i: list.index($keys, $name);
   $min: map.get($breakpoints, $name);
   $next: null;
   $max: null;
 
-  @if $i < length($keys) {
-    $next: nth($keys, $i + 1);
+  @if $i < list.length($keys) {
+    $next: list.nth($keys, $i + 1);
     $max: map.get($breakpoints, $next);
   }
 
@@ -61,7 +63,7 @@
 }
 
 @function strip-unit($number) {
-  @if type-of($number) == 'number' and not unitless($number) {
+  @if meta.type-of($number) == 'number' and not math.is-unitless($number) {
     @return math.div($number, $number * 0 + 1);
   }
 

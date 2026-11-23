@@ -1,6 +1,6 @@
 'use client'
 
-import React from 'react'
+import type { MouseEvent } from 'react'
 import { usePathname } from 'next/navigation'
 import Link from 'next/link'
 import cn from 'classnames'
@@ -21,10 +21,7 @@ const Menu = ({ variant }: MenuProps) => {
   const pathname = usePathname()
   const isHomepage = pathname === '/'
 
-  const handleScroll = (
-    e: React.MouseEvent<HTMLAnchorElement, MouseEvent>,
-    link: string
-  ) => {
+  const handleScroll = (e: MouseEvent<HTMLAnchorElement>, link: string) => {
     e.preventDefault()
 
     gsap.to(window, { scrollTo: link, ease: 'power2' })

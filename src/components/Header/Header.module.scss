@@ -1,5 +1,3 @@
-@use 'mixins' as *;
-
 .header {
   display: grid;
   grid-auto-flow: column;
@@ -8,9 +6,5 @@
 
   &__logo {
     justify-self: start;
-  }
-
-  @include b-d(sm) {
-    // Code...
   }
 }

@@ -1,4 +1,4 @@
-import React from 'react'
+import type { ReactNode } from 'react'
 import { Epilogue } from 'next/font/google'
 
 import Header from '~components/Header'
@@ -8,7 +8,7 @@ import 'modern-normalize/modern-normalize.css'
 import '../styles/app.scss'
 
 // Example of using google font
-// For local fonts follow: https://nextjs.org/docs/basic-features/font-optimization#local-fonts
+// For local fonts follow: https://nextjs.org/docs/app/getting-started/fonts
 
 const epilogue = Epilogue({
   subsets: ['latin'],
@@ -17,6 +17,8 @@ const epilogue = Epilogue({
 })
 
 export const metadata = {
+  // Absolute base for OG/Twitter image URLs; set SITE_URL in production.
+  metadataBase: new URL(process.env.SITE_URL ?? 'http://localhost:3000'),
   title: {
     template: '%s | Minimal Next Starter',
     default: 'Minimal Next Starter',
@@ -35,7 +37,7 @@ export const viewport = {
   themeColor: '#000000',
 }
 
-const RootLayout = ({ children }: { children: React.ReactNode }) => {
+const RootLayout = ({ children }: { children: ReactNode }) => {
   return (
     <html lang="en">
       <body className={epilogue.variable} style={{ minWidth: 360 }}>

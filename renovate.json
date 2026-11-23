@@ -10,16 +10,27 @@
       "automerge": true
     },
     {
-      "extends": ["packages:eslint", "packages:stylelint"],
-      "matchPackageNames": ["prettier"]
+      "matchPackageNames": ["next", "@next/*"],
+      "groupName": "next packages"
     },
     {
-      "matchPackageNames": ["eslint*"],
+      "matchPackageNames": [
+        "eslint",
+        "eslint-*",
+        "@eslint/*",
+        "typescript-eslint",
+        "globals"
+      ],
       "groupName": "eslint packages"
     },
     {
       "matchPackageNames": ["stylelint*"],
       "groupName": "stylelint packages"
+    },
+    {
+      "description": "typescript-eslint supports typescript <6.1.0 only",
+      "matchPackageNames": ["typescript"],
+      "allowedVersions": "<6.1"
     }
   ]
 }

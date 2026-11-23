@@ -22,7 +22,7 @@
     "serve": "next start",
     "analyze": "next analyze",
     "typecheck": "tsc --noEmit",
-    "format": "prettier --ignore-path .gitignore --write \"**/*.{js,jsx,ts,tsx,json,mdx,md,css,scss}\"",
+    "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,mdx,md,css,scss}\"",
     "lint": "eslint .",
     "prepare": "husky"
   },

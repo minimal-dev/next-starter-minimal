@@ -8,8 +8,6 @@
 
 html,
 body {
-  -webkit-overflow-scrolling: touch;
-
   // Mozilla Firefox
   scrollbar-color: #ced4da transparent;
   scrollbar-width: thin;
@@ -64,10 +62,6 @@ input:-webkit-autofill {
 
 a {
   transition: color 200ms;
-}
-
-.js-off-canvas-overlay {
-  -webkit-tap-highlight-color: transparent;
 }
 
 img {
