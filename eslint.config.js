@@ -1,34 +1,37 @@
-const next = require('eslint-config-next/core-web-vitals')
+const { defineConfig, globalIgnores } = require('eslint/config')
+const { fixupPluginRules } = require('@eslint/compat')
+const json = require('@eslint/json').default
+const nextPlugin = require('@next/eslint-plugin-next')
 const reactPlugin = require('eslint-plugin-react')
-const prettierPlugin = require('eslint-plugin-prettier')
-const prettierConfig = require('eslint-config-prettier')
-const js = require('@eslint/js')
-const { FlatCompat } = require('@eslint/eslintrc')
+const reactHooks = require('eslint-plugin-react-hooks')
+const prettierRecommended = require('eslint-plugin-prettier/recommended')
+const globals = require('globals')
+const tseslint = require('typescript-eslint')
 
-const compat = new FlatCompat({
-  baseDirectory: __dirname,
-  recommendedConfig: js.configs.recommended,
-})
-
-module.exports = [
-  { ignores: ['.next/**', 'out/**', 'build/**', 'next-env.d.ts'] },
-  ...next,
-  reactPlugin.configs.flat.recommended,
-  ...compat.extends('plugin:json/recommended-legacy'),
+module.exports = defineConfig([
+  globalIgnores(['.next/', 'out/', 'build/', '.claude/', 'next-env.d.ts']),
   {
-    plugins: { prettier: prettierPlugin },
+    files: ['**/*.{js,jsx,mjs,cjs,ts,tsx,mts,cts}'],
+    extends: [
+      reactHooks.configs.flat.recommended,
+      nextPlugin.configs['core-web-vitals'],
+      prettierRecommended,
+    ],
+    // eslint-plugin-react 7.x still calls context methods removed in ESLint 10.
+    plugins: { react: fixupPluginRules(reactPlugin) },
+    languageOptions: {
+      parser: tseslint.parser,
+      parserOptions: { ecmaFeatures: { jsx: true } },
+      globals: { ...globals.browser, ...globals.node },
+    },
     settings: { react: { version: 'detect' } },
     rules: {
-      ...prettierConfig.rules,
-      'prettier/prettier': 'error',
-      'react/jsx-filename-extension': [1, { extensions: ['.ts', '.tsx'] }],
-      'arrow-body-style': 'off',
-      'react/jsx-props-no-spreading': 'off',
-      'react/prop-types': 'warn',
-      'react/forbid-prop-types': 'off',
-      'import/prefer-default-export': 'off',
-      'react/state-in-constructor': 'off',
-      camelcase: ['warn', { ignoreImports: true }],
+      ...reactPlugin.configs.flat.recommended.rules,
+      ...reactPlugin.configs.flat['jsx-runtime'].rules,
+      'react/no-unknown-property': 'off',
+      'react/prop-types': 'off',
+      'react/jsx-no-target-blank': 'off',
+      'react/jsx-filename-extension': ['warn', { extensions: ['.ts', '.tsx'] }],
       'react/function-component-definition': [
         'error',
         {
@@ -36,6 +39,7 @@ module.exports = [
           unnamedComponents: 'arrow-function',
         },
       ],
+      camelcase: ['warn', { ignoreImports: true }],
       'id-match': [
         'error',
         '^[a-zA-Z0-9_$]*$',
@@ -46,4 +50,10 @@ module.exports = [
       ],
     },
   },
-]
+  {
+    files: ['**/*.json'],
+    ignores: ['package-lock.json'],
+    language: 'json/json',
+    extends: [json.configs.recommended],
+  },
+])

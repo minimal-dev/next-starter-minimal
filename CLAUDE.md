@@ -140,11 +140,14 @@ Turbopack's bundled sass-loader does not always preserve the source file's direc
 
 ## Quality tooling
 
-- **ESLint 9** with **flat config** in `eslint.config.js`. Composes:
-  - `eslint-config-next/core-web-vitals` (native flat export)
-  - `eslint-plugin-react`'s `configs.flat.recommended`
-  - `plugin:json/recommended` via `FlatCompat` (the `eslint-plugin-json` package only ships legacy configs)
-  - `eslint-config-prettier` rules + `eslint-plugin-prettier`
+- **ESLint 10** with **flat config** in `eslint.config.js`. `eslint-config-next` is not used: it hard-depends on `eslint-plugin-jsx-a11y` and `eslint-plugin-import`, which only support ESLint 9. The config composes its parts directly:
+  - `@next/eslint-plugin-next` `core-web-vitals`
+  - `eslint-plugin-react` `flat.recommended` + `flat['jsx-runtime']`, wrapped in `@eslint/compat` `fixupPluginRules` (7.x calls `context.getFilename()`, removed in ESLint 10). Its `eslint ^9.7` peer is bypassed with `overrides` in `package.json`; drop both once eslint-plugin-react ships ESLint 10 support.
+  - `eslint-plugin-react-hooks` `flat.recommended`
+  - `typescript-eslint` parser only (no type-aware or `recommended` rules)
+  - `eslint-plugin-prettier/recommended`
+  - `@eslint/json` `recommended` for `**/*.json` (`package-lock.json` ignored)
+- No accessibility linting (`jsx-a11y` removed on purpose).
 - **Stylelint 18** with `stylelint-config-standard-scss` + `stylelint-config-recess-order` + `stylelint-prettier`.
 - **Prettier 3**, single quotes, no semicolons, 2-space tabs, ES5 trailing commas.
 

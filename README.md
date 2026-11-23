@@ -72,8 +72,9 @@ The `?url` rule relies on Turbopack `condition.query` (Next 16.2+).
 
 ## Tooling
 
-- **ESLint 9** flat config: `eslint-config-next` (core web vitals),
-  `eslint-plugin-react`, `eslint-plugin-json`, Prettier as a rule.
+- **ESLint 10** flat config: `@next/eslint-plugin-next` (core web vitals),
+  `eslint-plugin-react`, `eslint-plugin-react-hooks`, `@eslint/json`,
+  Prettier as a rule. No `jsx-a11y`.
   Components are arrow functions (`react/function-component-definition`).
 - **Prettier 3**: single quotes, no semicolons, 2 spaces, ES5 trailing commas.
 - **Stylelint 18**: `stylelint-config-standard-scss`,
