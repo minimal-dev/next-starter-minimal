@@ -97,31 +97,36 @@ A minimal Next.js starter: App Router, TypeScript, SCSS modules, SVGR icons and 
 - **`modern-normalize`** as the cross-browser reset (imported once in `src/app/layout.tsx`).
 - **`classnames`** (as `cn`) for class composition, **`gsap`** for the menu smooth-scroll.
 - **SVG handling** lives in `next.config.js` `turbopack.rules` (see SVG section below).
-- **Sharp** for image optimization, installed by `next` as an optional dependency (not listed in `package.json`).
+- **Sharp** for image optimization. `next` installs it as an optional dependency; it is also a devDependency because `scripts/optimize-assets.mjs` imports it. Keep its range in step with `next`'s.
+- **SVGO 4** (`svgo.config.mjs`) optimizes committed SVGs. SVGR still runs its own bundled SVGO 3 at build time.
 
 ## Current layout
 
-| Path                                        | Role                                                          |
-| ------------------------------------------- | ------------------------------------------------------------- |
-| `src/app/`                                  | Routes, root `layout.tsx`, metadata images, `api/hello`       |
-| `src/components/<Name>/`                    | `index.tsx` + `<Name>.module.scss`                            |
-| `src/styles/settings.scss`                  | Design tokens (CSS custom properties, Sass mirrors, map)      |
-| `src/styles/mixins.scss`                    | `b-up` / `b-d` / `b-btw` / `b-o`, `clamp-builder()`           |
-| `src/styles/app.scss` + `components/*.scss` | Global base, container, button reset, typography              |
-| `src/assets/{img,icons,fonts}/`             | Static assets behind the `~img` / `~icons` / `~fonts` aliases |
-| `globals.d.ts`                              | `*.svg?url` module type                                       |
+| Path                                              | Role                                                          |
+| ------------------------------------------------- | ------------------------------------------------------------- |
+| `src/app/`                                        | Routes, root `layout.tsx`, metadata images, `api/hello`       |
+| `src/components/<Name>/`                          | `index.tsx` + `<Name>.module.scss`                            |
+| `src/styles/settings.scss`                        | Design tokens (CSS custom properties, Sass mirrors, map)      |
+| `src/styles/mixins.scss`                          | `b-up` / `b-d` / `b-btw` / `b-o`, `clamp-builder()`           |
+| `src/styles/app.scss` + `components/*.scss`       | Global base, container, button reset, typography              |
+| `src/assets/{img,icons,fonts}/`                   | Static assets behind the `~img` / `~icons` / `~fonts` aliases |
+| `globals.d.ts`                                    | `*.svg?url` module type                                       |
+| `scripts/optimize-assets.mjs` + `svgo.config.mjs` | Image gate: SVGO for SVG, sharp for PNG/JPG                   |
 
 ## Scripts
 
-| Script              | Purpose                                                                                                 |
-| ------------------- | ------------------------------------------------------------------------------------------------------- |
-| `npm run dev`       | Start Turbopack dev server (alias: `npm start`, which intentionally runs `next dev`, not `next start`). |
-| `npm run build`     | Production build via Turbopack.                                                                         |
-| `npm run serve`     | Run the production build (`next start`).                                                                |
-| `npm run analyze`   | Turbopack bundle analyzer UI (`next analyze`). Does not produce a build.                                |
-| `npm run typecheck` | `tsc --noEmit`.                                                                                         |
-| `npm run lint`      | `eslint .` against the flat config in `eslint.config.js`.                                               |
-| `npm run format`    | Prettier write across the repo (reads `.gitignore` and `.prettierignore`).                              |
+| Script                    | Purpose                                                                                                 |
+| ------------------------- | ------------------------------------------------------------------------------------------------------- |
+| `npm run dev`             | Start Turbopack dev server (alias: `npm start`, which intentionally runs `next dev`, not `next start`). |
+| `npm run build`           | Production build via Turbopack.                                                                         |
+| `npm run serve`           | Run the production build (`next start`).                                                                |
+| `npm run analyze`         | Turbopack bundle analyzer UI (`next analyze`). Does not produce a build.                                |
+| `npm run typecheck`       | `tsc --noEmit`.                                                                                         |
+| `npm run lint`            | `eslint .` against the flat config in `eslint.config.js`.                                               |
+| `npm run format`          | Prettier write across the repo (reads `.gitignore` and `.prettierignore`).                              |
+| `npm run assets:check`    | Report unoptimized SVG/PNG/JPG under `src/`, `public/` and the repo root; exits 1 if any.               |
+| `npm run assets:optimize` | Rewrite those files in place (SVGO, mozjpeg q80, palette PNG, long edge ≤ 3000px).                      |
+| `npm run assets:dupes`    | Report byte-identical and near-duplicate images; never writes.                                          |
 
 ## Path aliases
 
@@ -175,7 +180,7 @@ Turbopack's bundled sass-loader does not always preserve the source file's direc
 - No accessibility linting (`jsx-a11y` removed on purpose).
 - **Stylelint 18** with `stylelint-config-standard-scss` + `stylelint-config-recess-order` + `stylelint-prettier`.
 - **Prettier 3**, single quotes, no semicolons, 2-space tabs, ES5 trailing commas.
-- **Git hooks** (husky): `pre-commit` runs `npm run typecheck`, then `nano-staged` (`.nanostagedrc`: `eslint` on staged JS/TS/JSON, `stylelint --allow-empty-input` on staged CSS/SCSS, `prettier --write` on staged MD/MDX). `commit-msg` runs commitlint.
+- **Git hooks** (husky): `pre-commit` runs `npm run typecheck`, then blocks the commit if a staged SVG/PNG/JPG is unoptimized (`optimize-assets.mjs --check --staged`; fix with `npm run assets:optimize`), then `nano-staged` (`.nanostagedrc`: `eslint` on staged JS/TS/JSON, `stylelint --allow-empty-input` on staged CSS/SCSS, `prettier --write` on staged MD/MDX). `commit-msg` runs commitlint.
 
 ## Gotchas
 
@@ -221,10 +226,11 @@ Project-specific rules and skills live under `.cursor/`. They are **normative fo
 
 ## Skills — `.cursor/skills/` (+ `.claude/skills/` mirror)
 
-| Skill           | Invoke on                                                  | Output                                             |
-| --------------- | ---------------------------------------------------------- | -------------------------------------------------- |
-| `branch-review` | "review this branch", "review the last N commits"          | Baseline + severity-bucketed findings, then stops  |
-| `wrap-branch`   | "PR title/description", "squash title", "wrap this branch" | Copy-paste PR text; never pushes, never opens a PR |
+| Skill             | Invoke on                                                  | Output                                                  |
+| ----------------- | ---------------------------------------------------------- | ------------------------------------------------------- |
+| `branch-review`   | "review this branch", "review the last N commits"          | Baseline + severity-bucketed findings, then stops       |
+| `wrap-branch`     | "PR title/description", "squash title", "wrap this branch" | Copy-paste PR text; never pushes, never opens a PR      |
+| `optimize-assets` | New/updated SVG/PNG/JPG, "unoptimized assets staged"       | Optimized assets, visual check, `EXCLUDED` for breakage |
 
 ## Maintenance rule
 
