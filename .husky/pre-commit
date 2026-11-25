@@ -2,4 +2,20 @@
 . "$(dirname "$0")/common.sh"
 
 npm run typecheck
+
+# Block unoptimized images. Staged SVG/PNG/JPG are checked (never rewritten —
+# a lossy re-encode is the developer's call, not the hook's).
+# Fix with: npm run assets:optimize
+staged_img=$(git diff --cached --name-only --diff-filter=ACMR -- \
+  '*.svg' '*.png' '*.jpg' '*.jpeg' \
+  '*.SVG' '*.PNG' '*.JPG' '*.JPEG')
+
+if [ -n "$staged_img" ]; then
+  echo "▸ assets (svgo + sharp)…"
+  if ! printf '%s\n' "$staged_img" | xargs node scripts/optimize-assets.mjs --check --staged; then
+    echo "✖ Pre-commit blocked: unoptimized assets staged (see above)."
+    exit 1
+  fi
+fi
+
 npx nano-staged

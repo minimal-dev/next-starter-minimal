@@ -24,6 +24,9 @@
     "typecheck": "tsc --noEmit",
     "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,mdx,md,css,scss}\"",
     "lint": "eslint .",
+    "assets:check": "node scripts/optimize-assets.mjs --check",
+    "assets:optimize": "node scripts/optimize-assets.mjs",
+    "assets:dupes": "node scripts/optimize-assets.mjs --dupes",
     "prepare": "husky"
   },
   "devDependencies": {
@@ -47,10 +50,12 @@
     "nano-staged": "^1.0.2",
     "prettier": "3.10.1",
     "sass-embedded": "^1.108.2",
+    "sharp": "^0.35.5",
     "stylelint": "18.1.0",
     "stylelint-config-recess-order": "7.10.1",
     "stylelint-config-standard-scss": "18.0.0",
     "stylelint-prettier": "5.1.0",
+    "svgo": "^4.1.0",
     "typescript": "~6.0.3",
     "typescript-eslint": "^8.74.0"
   },
